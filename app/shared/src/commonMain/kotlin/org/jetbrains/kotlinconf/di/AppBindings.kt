@@ -10,6 +10,7 @@ import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
@@ -18,6 +19,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
+import okhttp3.CertificatePinner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -71,7 +73,20 @@ object AppBindings {
         @BaseUrl baseUrl: String,
         logger: Logger,
     ): HttpClient {
-        return HttpClient {
+        return HttpClient(OkHttp) {
+            engine {
+                config {
+                    certificatePinner(
+                        CertificatePinner.Builder()
+                            .add("kotlinconf-app-prod.labs.jb.gg", "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+                            .add("kotlinconf-app-prod.labs.jb.gg", "sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=")
+                            .add("kotlin-conf-staging.labs.jb.gg", "sha256/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC=")
+                            .add("kotlin-conf-staging.labs.jb.gg", "sha256/DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD=")
+                            .build()
+                    )
+                }
+            }
+
             install(ContentNegotiation) {
                 json()
             }
