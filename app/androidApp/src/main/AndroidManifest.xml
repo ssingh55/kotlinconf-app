@@ -21,7 +21,9 @@
             tools:ignore="Instantiatable"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.App.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity=""
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
