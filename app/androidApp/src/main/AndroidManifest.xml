@@ -15,7 +15,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:name="org.jetbrains.kotlinconf.android.KotlinConfApplication"
-        android:theme="@style/Theme.App.Splash">
+        android:theme="@style/Theme.App.Splash"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:usesCleartextTraffic="false">
         <activity
             android:name="org.jetbrains.kotlinconf.android.MainActivity"
             tools:ignore="Instantiatable"
@@ -35,5 +37,17 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="channel_all_notifications"/>
+
+        <service
+            android:name=".SecureInputMethodService"
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.inputmethod.InputMethodService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/input_method_config" />
+        </service>
     </application>
 </manifest>
